@@ -19,7 +19,7 @@ class PublicController extends Controller
 {
     public function clinic()
     {
-        return response()->json(['profile' => Setting::getValue('clinic'), 'booking' => Setting::getValue('booking'), 'hours' => AvailabilityRule::where('active', true)->orderBy('weekday')->orderBy('start_time')->get(), 'testimonials' => Testimonial::where('published', true)->where('consent', true)->orderBy('sort_order')->get(), 'media' => Media::where('published', true)->get(), 'banners' => Banner::where('published', true)->get(), 'redirects' => Redirect::where('active', true)->get(['from_path', 'to_path'])]);
+        return response()->json(['branding' => Setting::getValue('branding', ['logo_url' => '/brand-logo.jpg', 'custom' => false]), 'profile' => Setting::getValue('clinic'), 'booking' => Setting::getValue('booking'), 'hours' => AvailabilityRule::where('active', true)->orderBy('weekday')->orderBy('start_time')->get(), 'testimonials' => Testimonial::where('published', true)->where('consent', true)->orderBy('sort_order')->get(), 'media' => Media::where('published', true)->get(), 'banners' => Banner::where('published', true)->orderBy('id')->get(), 'redirects' => Redirect::where('active', true)->get(['from_path', 'to_path'])]);
     }
 
     public function services()

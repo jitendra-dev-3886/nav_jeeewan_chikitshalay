@@ -48,6 +48,16 @@ php artisan clinic:admin admin@your-clinic.example
 
 Receptionists operate appointments and enquiries. Doctors have read-only schedule access. Administrators manage configuration, content, media, users, reports, and exports. Optional patient OTP login, billing, medical records, prescriptions, payments, telemedicine, waitlists, overbooking, multiple branches, and provider-specific SMS/WhatsApp are not included.
 
+## Banners and clinic logo
+
+**Banners & posters → Add banner / poster** supports text announcements, landscape image banners, and full posters. Upload JPG/PNG/WebP (up to 4 MB), check the preview, and save as draft or publish. Posters are displayed without cropping; image banners fill a wide frame. **Media library** remains available for clinic gallery photos.
+
+Published content refreshes when returning to the page, periodically while it is open, and when an admin saves from another tab on the same origin. Session security tokens are renewed automatically after login, so a manual refresh is not required before saving.
+
+Use **Staff → Banners** to publish announcements in the carousel. It advances every five seconds and reverses at each end; a single published banner also slides back and forth. Controls include arrows, slide indicators, keyboard arrows, swipe, and pause/play. Hover or keyboard focus pauses automatic movement; reduced-motion preferences disable autoplay and animation. Unpublished banners remain hidden.
+
+Use **Staff → Settings → Clinic logo** to upload a JPG, PNG, or WebP logo. Saving updates the header/footer, main clinic feature, doctor page, login, and staff workspace. **Restore original logo** returns to the supplied artwork. Logo changes are administrator-only and audited.
+
 ## Database
 
 The running local app uses the dedicated **MySQL database `nav_jeevan_clinic`** on `127.0.0.1:3306`. Connection credentials are stored only in `clinic-backend/.env`. No pre-existing database was changed. The SQLite development database is retained as a fallback. Feature tests and eight-process capacity tests have passed on both SQLite and MySQL. Isolated test databases are named `nav_jeevan_clinic_feature_test` and `nav_jeevan_clinic_concurrency_test`.

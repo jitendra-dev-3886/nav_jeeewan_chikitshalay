@@ -255,6 +255,13 @@ class ClinicTest extends TestCase
         $this->actingAs($this->user());
         $response = $this->post('/api/admin/media', ['image' => UploadedFile::fake()->image('clinic.jpg', 200, 200), 'alt' => 'Clinic waiting area', 'published' => '1'], ['Accept' => 'application/json'])->assertCreated();
         $this->get($response->json('path'))->assertOk()->assertHeader('Content-Type', 'image/webp');
+        $this->getJson('/api/public/clinic')->assertJsonFragment(['alt'=>'Clinic waiting area']);
+        $this->putJson('/api/admin/media/'.$response->json('id'), ['alt'=>'Clinic waiting area','caption'=>'Reception','published'=>false])->assertOk();
+        $this->getJson('/api/public/clinic')->assertJsonMissing(['alt'=>'Clinic waiting area']);
+        $this->getJson('/api/admin/media')->assertJsonFragment(['alt'=>'Clinic waiting area','published'=>false]);
+        $this->putJson('/api/admin/media/'.$response->json('id'), ['alt'=>'Clinic waiting area','caption'=>'Reception','published'=>true])->assertOk();
+        $this->getJson('/api/public/clinic')->assertJsonFragment(['alt'=>'Clinic waiting area']);
+        $this->get('/gallery')->assertOk();
         $this->post('/api/admin/media', ['image' => UploadedFile::fake()->create('unsafe.svg', 1, 'image/svg+xml'), 'alt' => 'Unsafe', 'published' => '1'], ['Accept' => 'application/json'])->assertUnprocessable();
     }
 

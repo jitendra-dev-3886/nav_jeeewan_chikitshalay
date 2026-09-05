@@ -54,8 +54,8 @@ class SpaController extends Controller
                 $title = $service->seo_title ?: $service->name;
                 $description = $service->seo_description ?: $service->summary;
                 $body = '<h1>'.$escape($service->name).'</h1><p>'.$escape($service->description).'</p><h2>Before your visit</h2><p>'.$escape($service->preparation).'</p>';
-            } elseif (in_array($url, ['/', '/about', '/doctor', '/contact', '/services', '/articles', '/faqs', '/appointment'])) {
-                $titles = ['/' => 'Thoughtful care, close to home', '/about' => 'About the clinic & doctor', '/doctor' => 'Meet your doctor', '/contact' => 'Contact & directions', '/services' => 'Our services', '/articles' => 'Health articles', '/faqs' => 'Frequently asked questions', '/appointment' => 'Book an appointment'];
+            } elseif (in_array($url, ['/', '/about', '/doctor', '/contact', '/services', '/gallery', '/articles', '/faqs', '/appointment'])) {
+                $titles = ['/' => 'Thoughtful care, close to home', '/about' => 'About the clinic & doctor', '/doctor' => 'Meet your doctor', '/contact' => 'Contact & directions', '/gallery' => 'Clinic gallery', '/services' => 'Our services', '/articles' => 'Health articles', '/faqs' => 'Frequently asked questions', '/appointment' => 'Book an appointment'];
                 $title = $titles[$url];
                 $body = '<h1>'.$escape($profile['name'] ?? 'Nav Jeevan Chikitsalay').'</h1><p>'.$escape($profile['doctor'] ?? '').' · '.$escape($profile['qualifications'] ?? '').'</p><p>'.$escape($profile['designation'] ?? '').'</p><p>'.$escape($profile['address'] ?? '').'</p>';
                 if (in_array($url, ['/', '/services'])) {

@@ -10,7 +10,7 @@ class SeoController extends Controller
     public function sitemap()
     {
         $base = rtrim(config('app.frontend_url'), '/');
-        $paths = ['/', '/about', '/doctor', '/services', '/articles', '/faqs', '/contact', '/appointment', '/privacy', '/terms', '/disclaimer'];
+        $paths = ['/', '/about', '/doctor', '/services', '/gallery', '/articles', '/faqs', '/contact', '/appointment', '/privacy', '/terms', '/disclaimer'];
         foreach (Service::where('published', true)->pluck('slug') as $slug) {
             $paths[] = '/services/'.$slug;
         }

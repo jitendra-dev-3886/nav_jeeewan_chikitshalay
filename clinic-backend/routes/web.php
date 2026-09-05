@@ -50,6 +50,9 @@ Route::prefix('api')->group(function () {
         Route::middleware('role:admin')->group(function () {
             Route::get('reports/appointments', [AdminController::class, 'report']);
             Route::get('reports/export', [AdminController::class, 'export']);
+            Route::post('banner-images', [\App\Http\Controllers\BannerImageController::class, 'upload']);
+            Route::post('branding/logo', [\App\Http\Controllers\BrandingController::class, 'upload']);
+            Route::delete('branding/logo', [\App\Http\Controllers\BrandingController::class, 'reset']);
             Route::get('settings', [AdminController::class, 'settings']);
             Route::put('settings', [AdminController::class, 'saveSettings']);
             Route::get('audit', [AdminController::class, 'audit']);

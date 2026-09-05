@@ -108,7 +108,7 @@ class AdminController extends Controller
     private function rules(string $resource, ?int $id): array
     {
         return match ($resource) {
-            'banners' => ['title' => 'required|string|max:150', 'body' => 'required|string|max:500', 'link_label' => 'nullable|string|max:50', 'link_path' => ['nullable', 'regex:#^/(?!/|api(?:/|$)|admin(?:/|$))[a-zA-Z0-9/_-]*$#'], 'published' => 'required|boolean'],
+            'banners' => ['kind'=>'sometimes|in:text,banner,poster','image_url'=>['nullable','required_if:kind,banner,poster','regex:#^/storage/gallery/[a-f0-9-]{36}\.webp$#'],'image_alt'=>'nullable|string|max:200','title' => 'required|string|max:150', 'body' => 'nullable|string|max:500', 'link_label' => 'nullable|string|max:50', 'link_path' => ['nullable', 'regex:#^/(?!/|api(?:/|$)|admin(?:/|$))[a-zA-Z0-9/_-]*$#'], 'published' => 'required|boolean'],
             'redirects' => ['from_path' => ['required', 'regex:#^/(?!/|api(?:/|$)|admin(?:/|$)|assets(?:/|$)|storage(?:/|$)|login$|manage(?:/|$))[a-zA-Z0-9/_-]+$#', Rule::unique('redirects')->ignore($id)], 'to_path' => ['required', 'different:from_path', 'regex:#^/(?!/|api(?:/|$)|admin(?:/|$))[a-zA-Z0-9/_-]*$#'], 'active' => 'required|boolean'],
             'services' => ['name' => 'required|string|max:100', 'slug' => ['required', 'alpha_dash', 'max:120', Rule::unique('services')->ignore($id)], 'summary' => 'required|string|max:500', 'description' => 'nullable|string|max:8000', 'preparation' => 'nullable|string|max:1000', 'duration' => 'required|integer|min:5|max:120', 'icon' => 'nullable|string|max:30', 'published' => 'required|boolean', 'seo_title' => 'nullable|string|max:150', 'seo_description' => 'nullable|string|max:300'],
             'availability' => ['effective_from' => 'nullable|required_with:effective_to|date_format:Y-m-d', 'effective_to' => 'nullable|date_format:Y-m-d|after_or_equal:effective_from', 'weekday' => 'required|integer|between:0,6', 'start_time' => 'required|date_format:H:i', 'end_time' => 'required|date_format:H:i|after:start_time', 'slot_minutes' => 'required|integer|between:5,120', 'buffer_minutes' => 'required|integer|between:0,60', 'capacity' => 'required|integer|between:1,20', 'active' => 'required|boolean'],
@@ -124,7 +124,32 @@ class AdminController extends Controller
     {
         $model = $this->resource($r, $resource);
         abort_if($resource === 'enquiries' && ! $id, 405);
-        $data = $r->validate($this->rules($resource, $id));
+        $rules = $this->rules($resource, $id);
+        if ($resource === 'banners') {
+            // Editing a banner retains its saved image unless a replacement is supplied.
+            if ($id && ! $r->filled('image_url')) {
+                $r->merge(['image_url' => Banner::findOrFail($id)->image_url]);
+            }
+            $rules['image'] = \App\Services\BannerImageStorage::RULES;
+            if ($r->hasFile('image')) {
+                $rules['image_url'] = ['nullable', 'regex:#^/storage/gallery/[a-f0-9-]{36}\.webp$#'];
+            }
+        }
+        $data = $r->validate($rules, [
+            'image_url.required_if' => 'Choose an image for this banner or poster.',
+            'image_url.regex' => 'Please upload a valid banner image.',
+        ]);
+        if ($resource === 'banners') {
+            if ($r->hasFile('image') && ($data['kind'] ?? 'text') !== 'text') {
+                $data['image_url'] = app(\App\Services\BannerImageStorage::class)->store($r->file('image'));
+            }
+            unset($data['image']);
+        }
+        if($resource==='banners'){
+            $data['kind']=$data['kind']??'text';$data['body']=$data['body']??'';
+            if($data['kind']==='text'){abort_if(trim($data['body'])==='',422,'A text announcement needs a message.');$data['image_url']=null;}
+            elseif(!empty($data['image_url'])){abort_unless(Storage::disk('public')->exists(substr($data['image_url'],9)),422,'Upload a valid banner image first.');}
+        }
         if ($resource === 'testimonials' && $data['published'] && ! $data['consent']) {
             abort(422, 'Publication requires recorded consent.');
         }
