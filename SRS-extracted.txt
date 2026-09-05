@@ -1,0 +1,483 @@
+
+TECHNICAL SOFTWAREREQUIREMENTS SPECIFICATION
+Modern Clinic Website & Appointment Management Platform
+Nav Jeevan Chikitsalaya  •  React + Laravel
+Recommended Phase 1: A responsive public website, online appointment booking, WhatsApp/SMS-ready notifications, and a secure clinic admin panel. Patient medical records and billing remain future modules unless the client explicitly approves them.
+
+Document
+Value
+Client
+Nav Jeevan Chikitsalaya
+Primary practitioner
+Dr. Parmesh Kumar (credentials to be confirmed by client)
+Prepared for
+Discovery, estimation, design and development approval
+Version
+1.0 — Draft for client confirmation
+Prepared on
+05 September 2026
+Technology direction
+React frontend, Laravel REST API, MySQL database
+
+Brand note: Clinic name, practitioner credentials, services, address, phone number, registration details and consultation timings must be confirmed before publication.
+
+1. Executive Summary
+This SRS defines a professional, mobile-first digital platform for Nav Jeevan Chikitsalaya. The solution is designed for local patient discovery, trust building, appointment requests and efficient day-to-day appointment administration. The initial release avoids unnecessary hospital-management complexity and keeps the experience practical for a single clinic or small team.
+1.1 Product Vision
+Create a fast, trustworthy and accessible clinic website that helps patients understand services, contact the clinic and book a visit in under two minutes, while allowing clinic staff to manage availability and appointments from a simple admin dashboard.
+1.2 Business Goals
+Increase appointment enquiries from Google Search, Maps, social media and WhatsApp.
+Reduce phone-call dependency and manual diary errors.
+Present verified doctor, clinic, service and timing information consistently.
+Give the clinic an owned digital presence that can grow into a patient portal later.
+Provide measurable insights: enquiries, bookings, sources, cancellations and popular services.
+1.3 Phase 1 Boundaries
+Included
+Not included unless separately approved
+Website, service pages, appointment requests, slot management, admin dashboard, content, enquiries and basic reports
+Diagnosis automation, emergency triage, e-prescription, telemedicine, online pharmacy, lab integration, insurance processing and full electronic medical records
+
+2. Stakeholders, Users and Access
+Role
+Primary needs
+Access
+Visitor / Patient
+Find clinic, understand services, book or contact
+Public pages; no login required for booking
+Returning Patient (optional)
+Review and manage own appointments
+OTP-based patient portal
+Receptionist
+Create, confirm, reschedule and cancel appointments
+Restricted admin operations
+Doctor
+View daily schedule, patient reason and status
+Clinical schedule view; no unrelated settings
+Clinic Administrator
+Manage content, staff, services, timings and reports
+Full clinic-level access
+System Administrator
+Technical support, configuration and audit review
+Platform operations; least-privilege access
+
+3. Information Architecture / Sitemap
+Area
+Pages / screens
+Public website
+Home; About Clinic; About Doctor; Services; Service Detail; Appointment; Health Articles; Article Detail; FAQs; Contact; Privacy; Terms; Disclaimer
+Patient self-service
+Appointment confirmation; secure manage-booking link; OTP login (optional); My Appointments
+Clinic admin
+Dashboard; Calendar; Appointments; Patients/Contacts; Services; Availability; Enquiries; Articles; Media; Testimonials; Reports; Users & Roles; Settings; Audit Log
+
+4. Functional Modules and Features
+4.1 Public Website & Trust Layer
+Modern homepage with clinic promise, doctor profile, key services, timings, address, testimonials and strong “Book Appointment” / “Call Now” actions.
+Doctor profile with verified qualifications, registration details, experience, languages and professional photograph.
+Service catalogue with plain-language descriptions, suitable-for information, preparation guidance and consultation CTA.
+Clinic gallery, facilities, hygiene practices and accessibility information.
+Contact page with map, landmark, directions, phone, WhatsApp, hours and click-to-call actions.
+FAQ, privacy notice, terms and medical disclaimer.
+Hindi and English content architecture; Phase 1 can launch in one language while remaining translation-ready.
+4.2 Appointment Booking
+Select service or consultation type, preferred date and available slot.
+Collect minimum details: patient name, mobile number, age group, gender (optional), visit reason, new/follow-up flag and consent.
+OTP verification or rate-limited confirmation to reduce fake bookings.
+Configurable workflow: instant confirmation or receptionist approval.
+Confirmation screen with appointment reference, directions, clinic instructions and add-to-calendar link.
+Secure cancellation/reschedule link with clinic-defined cut-off rules.
+Duplicate booking warning using mobile number, date and time window.
+Walk-in and phone bookings can be entered by reception staff.
+4.3 Schedule & Availability Management
+Recurring weekly consultation schedule.
+Slot duration, buffer time, daily capacity and booking horizon configuration.
+Breaks, holidays, emergency closures and doctor leave blocks.
+Day, week and list views with filters by status and service.
+Overbooking permission restricted to authorized staff.
+Optional waitlist when the preferred day is full.
+4.4 Appointment Operations
+Status
+Meaning / allowed action
+Pending
+Awaiting clinic confirmation
+Confirmed
+Slot reserved and patient notified
+Checked in
+Patient arrived at clinic
+Completed
+Visit completed; no diagnosis is stored in Phase 1
+Cancelled
+Cancelled by patient or clinic with reason
+No-show
+Patient did not attend
+
+Search by reference, patient name, phone, date and status.
+Receptionist notes are internal and excluded from public notifications.
+Every status change records actor, timestamp and optional reason.
+Printable daily appointment list and CSV export with role restrictions.
+4.5 Notifications & Communication
+Template-based appointment confirmation, reminder, reschedule and cancellation messages.
+Email supported natively; SMS and WhatsApp integrated through approved third-party providers when credentials are available.
+Reminder schedule configurable, for example 24 hours and 2 hours before appointment.
+Delivery status and retry tracking; sensitive clinical details must not appear in message previews.
+Admin-controlled consent text and communication preference capture.
+4.6 Content Management & Local SEO
+Admin-managed doctor profile, services, clinic timings, contact details, banners, FAQs and health articles.
+SEO fields: page title, meta description, canonical URL, social sharing image and clean slug.
+Structured data for clinic/physician, services, FAQs and breadcrumbs after content verification.
+XML sitemap, robots controls, redirect manager and optimized image alt text.
+Preview and draft/publish workflow to prevent accidental public changes.
+4.7 Enquiries, Testimonials & Media
+Contact/enquiry form with spam protection, source tracking and status assignment.
+Testimonials require explicit approval before publication; admin can hide or reorder them.
+Gallery upload with compression, captions and safe file validation.
+Social media and map links managed from settings without code changes.
+4.8 Admin Dashboard & Reports
+Today: total appointments, pending approvals, confirmed, completed, cancelled and no-show.
+Appointment trend by day/week/month and booking source.
+Popular services and busiest appointment windows.
+Enquiry conversion and cancellation/no-show rate.
+Role-filtered CSV export; no public analytics should expose patient identity.
+4.9 Future / Optional Modules
+Module
+Add only when business process is confirmed
+Patient portal
+OTP login, profile, appointment history and documents
+Billing
+Invoices, receipts, payment status and tax configuration
+Clinical records
+Vitals, diagnosis, notes, prescriptions and document access with enhanced security
+Teleconsultation
+Video link, payment, consent and virtual waiting room
+Lab / pharmacy
+Orders, reports and inventory/provider integration
+Multi-doctor / multi-branch
+Practitioner schedules, branch selection and centralized reporting
+
+5. Core User Journeys
+5.1 Patient Books an Appointment
+Patient opens the website from search, map, QR code or social link.
+Patient reviews the doctor/service and selects Book Appointment.
+System displays valid dates and available slots in clinic local time.
+Patient enters minimum details, accepts consent text and verifies mobile if enabled.
+System creates a pending or confirmed appointment based on clinic policy.
+Patient receives a reference and communication; staff sees the booking immediately.
+Patient may reschedule or cancel through a time-limited secure link.
+5.2 Reception Confirms and Completes a Visit
+Receptionist signs in and opens today’s queue.
+Pending request is reviewed for slot conflicts and confirmed or rescheduled.
+On arrival, status is changed to Checked in.
+After consultation, status is changed to Completed.
+System logs each change and updates dashboard metrics.
+6. Detailed Functional Requirements
+ID
+Requirement
+Priority
+FR-001
+The public site shall be usable on mobile, tablet and desktop without horizontal scrolling.
+Must
+FR-002
+The system shall show only bookable slots derived from active availability, closures and existing capacity.
+Must
+FR-003
+A booking shall receive a unique, non-sequential public reference.
+Must
+FR-004
+The same slot/capacity unit shall not be allocated beyond its configured limit under concurrent requests.
+Must
+FR-005
+The system shall support Pending, Confirmed, Checked in, Completed, Cancelled and No-show states.
+Must
+FR-006
+Authorized users shall create, reschedule and cancel appointments with an audit trail.
+Must
+FR-007
+Users shall see only features and records allowed by their assigned role.
+Must
+FR-008
+Content editors shall save drafts and publish verified website content.
+Must
+FR-009
+The system shall validate, normalize and rate-limit public form submissions.
+Must
+FR-010
+The system shall store notification attempts and provider response status.
+Should
+FR-011
+Patients shall receive a secure booking-management link or OTP-based access.
+Should
+FR-012
+Reports shall support date, status, service and source filters.
+Should
+FR-013
+Administrators shall configure clinic profile, hours, slot rules and message templates.
+Must
+FR-014
+The system shall produce a sitemap and page-level SEO metadata.
+Must
+FR-015
+Admin exports shall be permission-controlled and recorded.
+Should
+
+7. UI/UX Specification
+7.1 Design Direction
+The experience should feel calm, credible and contemporary—not like a crowded hospital portal. Use the existing dark green and navy identity with generous white space, restrained shadows, rounded cards and clear typography. Medical red is reserved for urgent warnings, not normal calls to action.
+Token
+Recommendation
+Primary
+#0B6B2C — clinic green
+Secondary
+#102A66 — trust navy
+Background
+#F7FAF8 / white
+Typography
+Inter or Noto Sans; Noto Sans Devanagari for Hindi
+CTA
+Solid green; minimum 44 × 44 px touch target
+Cards
+12–16 px radius; subtle border; minimal shadow
+Grid
+Mobile-first; max content width approximately 1200 px
+
+7.2 Homepage Structure
+Utility strip: phone, hours and emergency disclaimer.
+Header: logo, concise navigation, language option and Book Appointment button.
+Hero: clear clinic benefit, doctor identity, trust facts and two primary actions.
+Service cards: six or fewer primary services with View Details.
+Why choose us: verified facts only—no unsubstantiated “best clinic” claims.
+Doctor section, clinic timings, appointment CTA, testimonials, map and footer.
+7.3 Booking UX Rules
+Use a short multi-step form with progress indication and clear back navigation.
+Do not request diagnosis, ID proof or unnecessary sensitive data during initial booking.
+Show validation beside the relevant field and preserve entered data after errors.
+Use plain Hindi/English labels; avoid medical jargon.
+Display confirmation, clinic address, timing, cancellation method and “not for emergencies” notice.
+Sticky Book / Call / WhatsApp actions on small screens without covering content.
+7.4 Accessibility
+Target WCAG 2.2 AA principles: keyboard access, visible focus, semantic headings, labels, alt text and sufficient contrast.
+Support zoom and responsive reflow; avoid information communicated by colour alone.
+Provide descriptive errors and status announcements for assistive technology.
+Respect reduced-motion preference and keep animation optional and brief.
+8. Technical Architecture
+Layer
+Recommended implementation
+Frontend
+React + TypeScript, Vite, React Router, TanStack Query, React Hook Form + schema validation, Tailwind CSS or a controlled component system
+Backend
+Laravel REST API on a supported PHP release, using Form Requests, Policies, Events/Listeners, Queues and Scheduler
+Database
+MySQL 8 with UTC timestamps, indexed appointment queries and transactional booking
+Authentication
+Laravel Sanctum for admin SPA; OTP or signed links for patient self-service
+Cache / queue
+Redis recommended in production; database queue acceptable for low-volume launch
+Storage
+Private object storage for protected files; public optimized media for website assets
+Integrations
+Email provider; optional SMS/WhatsApp; map link/embed; analytics with consent controls
+Deployment
+Nginx/Apache + PHP-FPM, HTTPS, separate frontend build and Laravel API, automated backups
+
+Version policy: Use currently supported stable framework/runtime versions at project kickoff. Exact versions must be locked in package files and reviewed before production deployment.
+
+8.1 Logical Components
+Public React application for discovery, content and booking.
+Protected React admin workspace for clinic operations.
+Laravel API modules: Identity, Clinic Configuration, Availability, Appointments, Content, Notifications, Reporting and Audit.
+Queue workers for reminders and non-blocking external communications.
+Database for operational data and immutable audit events.
+External adapters so SMS/WhatsApp/map providers can be changed without rewriting business logic.
+8.2 API Design
+Method & endpoint
+Purpose
+Access
+GET /api/public/clinic
+Clinic profile, verified timings and contact information
+Public
+GET /api/public/services
+Published service catalogue
+Public
+GET /api/public/availability
+Available slots for date/service
+Public, rate-limited
+POST /api/public/appointments
+Create appointment request
+Public, validated
+GET /api/public/appointments/{token}
+View secure booking summary
+Signed token / OTP
+PATCH /api/public/appointments/{token}
+Request reschedule or cancellation
+Signed token / OTP
+POST /api/auth/login
+Admin authentication
+Public endpoint, protected controls
+GET /api/admin/appointments
+Filtered appointment list/calendar data
+Staff
+PATCH /api/admin/appointments/{id}/status
+Controlled status transition
+Authorized staff
+CRUD /api/admin/services
+Manage service catalogue
+Admin/editor
+CRUD /api/admin/availability
+Manage hours, breaks and closures
+Admin
+GET /api/admin/reports/appointments
+Aggregated operational reporting
+Admin
+
+9. Data Model
+Entity
+Key fields / relationships
+users
+id, name, email/mobile, password hash, status, last_login_at
+roles / permissions
+role definitions and granular permission assignments
+clinic_profiles
+name, practitioner, registration, contacts, address, geo link, verified_at
+services
+name, slug, summary, duration, active, SEO fields
+availability_rules
+weekday, start/end, slot duration, capacity, effective dates
+schedule_blocks
+start/end, type, reason, created_by
+patients
+minimal contact identity; created from bookings; deduplication key
+appointments
+reference, patient_id, service_id, start/end, status, source, reason, consent_at
+appointment_events
+appointment_id, from/to status, actor, reason, timestamp
+enquiries
+name, contact, message, source, status, assigned_to
+content_pages / articles
+slug, language, draft/published content, SEO and author
+notifications
+channel, template, recipient mask, provider status, attempts
+audit_logs
+actor, action, entity, metadata, IP/device context, timestamp
+settings
+typed clinic-level configuration; secrets stored outside general settings
+
+Data rule: Phase 1 stores appointment and contact information, not clinical diagnosis or prescriptions. Adding clinical records requires a separate privacy, access, retention and threat-model review.
+10. Security, Privacy and Safety
+HTTPS everywhere; secure cookies; CSRF protection; strict CORS allow-list; security headers and content security policy.
+Passwords hashed with a current adaptive algorithm; optional multi-factor authentication for administrators.
+Role-based authorization enforced on the Laravel API, never only in the React UI.
+Validate and sanitize all input; parameterized queries through ORM/query builder; safe upload type/size inspection.
+Rate limits, bot protection and login throttling; lockout alerts without revealing account existence.
+Encrypt sensitive backups and secrets; keep keys outside source control; rotate credentials when staff changes.
+Minimize patient data, capture explicit consent, define retention/deletion rules and support correction requests.
+Mask mobile numbers and personal data in logs, analytics, notifications and non-production environments.
+Audit privileged actions and exports; restrict production database access by need.
+Display a prominent instruction that the website is not an emergency service and does not provide automated medical advice.
+Before launch, the clinic should obtain appropriate legal/privacy review for the jurisdictions and healthcare workflows it serves.
+11. Non-Functional Requirements
+ID
+Requirement / target
+NFR-01 Performance
+Core public pages target LCP = 2.5 seconds at the 75th percentile under agreed mobile conditions; optimize images, fonts and API payloads.
+NFR-02 Availability
+Target 99.5% monthly availability excluding planned maintenance for the launch tier.
+NFR-03 Scalability
+Stateless API design; horizontal scale path; queues for notification bursts.
+NFR-04 Reliability
+Appointment creation uses a database transaction and conflict-safe capacity check; external message failure must not lose a booking.
+NFR-05 Accessibility
+Public patient journeys designed and tested against WCAG 2.2 AA principles.
+NFR-06 Browser
+Current and previous major versions of Chrome, Edge, Firefox and Safari; responsive Android/iOS web browsers.
+NFR-07 SEO
+Server-rendered or pre-rendered public content where required; unique metadata, canonical URLs and sitemap.
+NFR-08 Observability
+Structured logs, error tracking, uptime checks, job-failure alerts and backup monitoring.
+NFR-09 Recovery
+Daily database backup minimum; documented restoration procedure; RPO/RTO finalized with hosting plan.
+NFR-10 Maintainability
+Modular Laravel services, typed React code, automated linting, tests, migrations and API documentation.
+
+12. Testing and Quality Plan
+Test level
+Minimum coverage focus
+Unit
+Slot calculation, status transitions, validation, permissions and notification selection
+API / feature
+Booking, concurrency conflict, admin actions, filters, content publishing and audit events
+Frontend
+Forms, validation, responsive states, loading/error states and role-based navigation
+End-to-end
+Book ? confirm ? remind ? check in ? complete; reschedule and cancel paths
+Security
+Authorization bypass, rate limit, CSRF/CORS, upload and common injection checks
+Accessibility
+Keyboard, focus, labels, contrast, zoom and screen-reader smoke tests
+Performance
+Homepage/booking load, API latency and expected concurrent booking traffic
+UAT
+Clinic staff validates real schedule, messages, services, translations and reporting
+
+13. Delivery Plan
+Phase
+Indicative duration
+Outputs
+0. Discovery
+2–3 working days
+Confirmed content, workflows, roles, integrations, hosting and acceptance criteria
+1. UX & visual design
+4–6 working days
+Sitemap, wireframes, design system and responsive key screens
+2. Core development
+10–15 working days
+Public site, booking API, admin appointments, schedules and content
+3. Integrations & hardening
+4–6 working days
+Notifications, analytics, security, SEO and backups
+4. QA, UAT & launch
+4–6 working days
+Testing, content migration, training, deployment and handover
+
+Indicative total: approximately 24–36 working days after content, provider credentials and client decisions are available. Final estimate depends on languages, notification providers, patient login and optional modules.
+14. Phase 1 Acceptance Criteria
+A patient can find verified clinic information and complete a valid booking on a mobile device.
+Unavailable or closed slots cannot be booked, including during concurrent requests.
+Reception staff can create, confirm, reschedule, cancel, check in and complete an appointment.
+Clinic admin can manage services, availability, closures, essential content and users without code changes.
+Configured confirmation/reminder messages are queued and their delivery status is visible.
+Public forms have validation, consent, spam/rate controls and helpful error states.
+Role permissions are enforced by API tests; privileged actions appear in the audit log.
+Responsive, accessibility, browser, backup-restore and launch smoke tests pass.
+All published medical, practitioner and contact claims are approved by the client.
+15. Client Decisions Required Before Build
+Decision
+Options / information needed
+Appointment policy
+Instant confirmation or receptionist approval; slot duration; capacity; booking horizon
+Practitioner details
+Correct name, degree, registration number, experience and languages
+Clinic details
+Exact address, pin code, phone/WhatsApp, email, map link and weekly timings
+Services
+Approved service list and patient-safe descriptions
+Languages
+English, Hindi, or bilingual launch
+Notifications
+Email only, SMS, WhatsApp, or combination; provider/account owner
+Patient access
+No login with secure link, or OTP-based patient portal
+Payments
+No online payment in Phase 1, or booking fee and refund policy
+Hosting/domain
+Existing domain/hosting or new managed deployment
+Content approval
+Named person responsible for doctor profile, claims, images and legal text
+
+16. Assumptions and Open Questions
+The clinic begins as a single-location, single-primary-practitioner operation.
+The logo is the current brand reference; a web-ready logo pack may need to be created separately.
+The exact practitioner credentials and Hindi text read from the supplied artwork require client confirmation.
+The clinic will own the domain, hosting, messaging-provider and analytics accounts.
+Content and translations will be approved by an authorized clinic representative before publication.
+This document is a software specification, not legal, medical or regulatory advice.
+Recommended next action: Run a 45–60 minute client discovery meeting using Section 15, then freeze Phase 1 scope before preparing the final quotation and UI wireframes.
+

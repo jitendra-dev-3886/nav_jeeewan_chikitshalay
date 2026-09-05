@@ -1,0 +1,11 @@
+.local/
+**/node_modules/
+**/vendor/
+**/.env
+**/.env.browser
+**/.env.*.local
+**/database/*.sqlite*
+**/dist/
+**/storage/*.key
+**/test-results/
+**/playwright-report/
