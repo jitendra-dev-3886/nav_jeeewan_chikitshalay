@@ -5,7 +5,6 @@
 **/.env.browser
 **/.env.*.local
 **/database/*.sqlite*
-**/dist/
 **/storage/*.key
 **/test-results/
 **/playwright-report/
