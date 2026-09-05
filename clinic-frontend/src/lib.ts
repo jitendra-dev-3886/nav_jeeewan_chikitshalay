@@ -16,8 +16,8 @@ export async function api<T>(path: string, method = 'GET', body?: unknown, retry
   if(!response.ok) { if(response.status===419) csrf=''; throw new ApiError(data.message || 'Something went wrong. Please try again.',response.status,data.errors) }
   return data
 }
-export interface Service { id:number; name:string; slug:string; summary:string; description:string; preparation:string; duration:number; icon:string; published:boolean; seo_title?:string; seo_description?:string }
-export interface Page { id:number; type:string; title:string; slug:string; excerpt:string; body:string; language:string; seo_title?:string; seo_description?:string }
+export interface Service { image_url?:string|null; image_alt?:string|null; id:number; name:string; slug:string; summary:string; description:string; preparation:string; duration:number; icon:string; published:boolean; seo_title?:string; seo_description?:string }
+export interface Page { image_url?:string|null; image_alt?:string|null; id:number; type:string; title:string; slug:string; excerpt:string; body:string; language:string; seo_title?:string; seo_description?:string }
 export interface Profile { name:string; name_hi:string; doctor:string; doctor_hi:string; qualifications:string; designation:string; address:string; address_hi:string; phone:string; whatsapp:string; email:string; map_url:string; registration:string; hours_confirmed:boolean; services_confirmed:boolean; consent_text:string; instructions:string }
 export interface Policy { instant_confirmation:boolean; horizon_days:number; lead_minutes:number; cutoff_hours:number; daily_capacity:number; reminder_hours:number[] }
 export interface Clinic { branding?:{logo_url:string;custom:boolean}; banners:{kind?:'text'|'banner'|'poster';image_url?:string;image_alt?:string;id:number;title:string;body:string;link_label:string;link_path:string}[]; redirects:{from_path:string;to_path:string}[]; profile:Profile; booking:Policy; hours:{id:number;weekday:number;start_time:string;end_time:string}[]; testimonials:{id:number;name:string;quote:string}[]; media:{id:number;path:string;alt:string;caption:string}[] }

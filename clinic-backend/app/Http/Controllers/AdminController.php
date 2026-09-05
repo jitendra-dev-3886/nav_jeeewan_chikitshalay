@@ -125,6 +125,11 @@ class AdminController extends Controller
         $model = $this->resource($r, $resource);
         abort_if($resource === 'enquiries' && ! $id, 405);
         $rules = $this->rules($resource, $id);
+        if (in_array($resource, ['services', 'content'], true)) {
+            $rules['image'] = \App\Services\BannerImageStorage::RULES;
+            $rules['image_alt'] = 'nullable|string|max:200';
+            $rules['remove_image'] = 'sometimes|boolean';
+        }
         if ($resource === 'banners') {
             // Editing a banner retains its saved image unless a replacement is supplied.
             if ($id && ! $r->filled('image_url')) {
@@ -139,6 +144,17 @@ class AdminController extends Controller
             'image_url.required_if' => 'Choose an image for this banner or poster.',
             'image_url.regex' => 'Please upload a valid banner image.',
         ]);
+        if (in_array($resource, ['services', 'content'], true)) {
+            if ($r->boolean('remove_image')) {
+                $data['image_url'] = null;
+                $data['image_alt'] = null;
+            }
+            if ($r->hasFile('image')) {
+                $data['image_url'] = app(\App\Services\BannerImageStorage::class)->store($r->file('image'));
+                $data['image_alt'] = $r->input('image_alt') ?: ($data['name'] ?? $data['title']);
+            }
+            unset($data['image'], $data['remove_image']);
+        }
         if ($resource === 'banners') {
             if ($r->hasFile('image') && ($data['kind'] ?? 'text') !== 'text') {
                 $data['image_url'] = app(\App\Services\BannerImageStorage::class)->store($r->file('image'));

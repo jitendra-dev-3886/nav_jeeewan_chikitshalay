@@ -13,3 +13,5 @@ createRoot(document.getElementById('root')!).render(
 import './posters.css'
 
 import './gallery.css'
+
+import './care-pages.css'
